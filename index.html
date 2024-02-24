@@ -4,6 +4,69 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trending Music Videos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        #trendingMusicVideos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .videoCard {
+            background-color: #ffffff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .videoThumbnail {
+            width: 100%;
+            height: auto;
+        }
+
+        .videoInfo {
+            padding: 15px;
+        }
+
+        .videoTitle {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #333333;
+        }
+
+        .videoTitle a {
+            text-decoration: none;
+            color: #333333;
+        }
+
+        .videoTitle a:hover {
+            color: #007bff;
+        }
+
+        .watchButton {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            text-align: center;
+            background-color: #007bff;
+            color: #ffffff;
+            text-decoration: none;
+            border: none;
+            border-radius: 0 0 10px 10px;
+            cursor: pointer;
+        }
+
+        .watchButton:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
     <!-- Trending music videos section -->
@@ -11,17 +74,9 @@
         <!-- Trending music videos will be displayed here -->
     </section>
 
-    <!-- Pagination -->
-    <div id="pagination">
-        <button id="prevPage" disabled>Previous Page</button>
-        <button id="nextPage">Next Page</button>
-    </div>
-
-    <!-- JavaScript code for fetching trending music videos and pagination -->
+    <!-- JavaScript code for fetching trending music videos -->
     <script>
-        let page = 1;
-
-        // Function to fetch trending music videos from YouTube Data API
+        // Function to fetch trending music videos
         function fetchTrendingMusicVideos() {
             const apiKey = 'AIzaSyAAupl0BF00KNHLJHhztrW4mNWzCpmBOo0'; // Replace 'YOUR_YOUTUBE_API_KEY' with your actual YouTube Data API key
             const apiUrl = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&part=snippet&type=video&maxResults=10&q=music`;
@@ -38,35 +93,44 @@
                     const thumbnailUrl = item.snippet.thumbnails.medium.url;
                     const videoUrl = `https://www.youtube.com/watch?v=${videoId}`; // Construct YouTube video URL
 
-                    const videoElement = document.createElement('div');
-                    videoElement.innerHTML = `
-                        <h2>${videoTitle}</h2>
-                        <a href="${videoUrl}" target="_blank">
-                            <img src="${thumbnailUrl}" alt="${videoTitle}">
-                            Watch Video
-                        </a>
-                    `;
-                    trendingMusicVideosContainer.appendChild(videoElement);
-                });
+                    const videoCard = document.createElement('div');
+                    videoCard.classList.add('videoCard');
 
-                document.getElementById('prevPage').disabled = page === 1; // Disable Previous Page button on first page
+                    const videoThumbnail = document.createElement('img');
+                    videoThumbnail.classList.add('videoThumbnail');
+                    videoThumbnail.src = thumbnailUrl;
+                    videoThumbnail.alt = videoTitle;
+
+                    const videoInfo = document.createElement('div');
+                    videoInfo.classList.add('videoInfo');
+
+                    const titleElement = document.createElement('h2');
+                    titleElement.classList.add('videoTitle');
+                    const titleLink = document.createElement('a');
+                    titleLink.href = videoUrl;
+                    titleLink.target = '_blank';
+                    titleLink.textContent = videoTitle;
+                    titleElement.appendChild(titleLink);
+
+                    const watchButton = document.createElement('a');
+                    watchButton.classList.add('watchButton');
+                    watchButton.href = videoUrl;
+                    watchButton.target = '_blank';
+                    watchButton.textContent = 'Watch Video';
+
+                    videoInfo.appendChild(titleElement);
+                    videoInfo.appendChild(watchButton);
+
+                    videoCard.appendChild(videoThumbnail);
+                    videoCard.appendChild(videoInfo);
+
+                    trendingMusicVideosContainer.appendChild(videoCard);
+                });
             })
             .catch(error => {
                 console.error('Error fetching trending music videos:', error);
             });
         }
-
-        // Event listener for Next Page button
-        document.getElementById('nextPage').addEventListener('click', () => {
-            page++;
-            fetchTrendingMusicVideos();
-        });
-
-        // Event listener for Previous Page button
-        document.getElementById('prevPage').addEventListener('click', () => {
-            page--;
-            fetchTrendingMusicVideos();
-        });
 
         // Call the fetchTrendingMusicVideos function when the page loads
         window.onload = fetchTrendingMusicVideos;
