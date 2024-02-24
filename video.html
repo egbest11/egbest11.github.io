@@ -6,7 +6,88 @@
     <title>Embedded Video with Lyrics</title>
 </head>
 <body>
+    <div id="player"></div><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Embedded Video with Lyrics</title>
+</head>
+<body>
     <div id="player"></div>
+    <div id="lyrics"></div>
+
+    <script>
+        // Function to extract the video ID from the URL
+        function getVideoIdFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('id');
+        }
+
+        // Function to fetch lyrics based on artist and song title
+        function fetchLyrics(artist, title) {
+            const apiUrl = `https://api.lyrics.ovh/v1/${encodeURIComponent(artist)}/${encodeURIComponent(title)}`;
+
+            fetch(apiUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Lyrics not found');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (!data.lyrics) {
+                    throw new Error('Lyrics not found');
+                }
+                const lyricsContainer = document.getElementById('lyrics');
+                lyricsContainer.textContent = data.lyrics;
+            })
+            .catch(error => {
+                console.error('Error fetching lyrics:', error);
+                const lyricsContainer = document.getElementById('lyrics');
+                lyricsContainer.textContent = 'Lyrics not available.';
+            });
+        }
+
+        // Function to embed the YouTube video using an iframe
+        function embedYouTubeVideo(videoId) {
+            const playerDiv = document.getElementById('player');
+            const playerFrame = document.createElement('iframe');
+            playerFrame.setAttribute('width', '560');
+            playerFrame.setAttribute('height', '315');
+            playerFrame.setAttribute('src', `https://www.youtube.com/embed/${videoId}`);
+            playerFrame.setAttribute('frameborder', '0');
+            playerFrame.setAttribute('allowfullscreen', '');
+            playerDiv.appendChild(playerFrame);
+        }
+
+        // Main function to initialize the page
+        function initializePage() {
+            const videoId = getVideoIdFromUrl();
+            embedYouTubeVideo(videoId);
+
+            // Fetch video title and use it to fetch lyrics
+            fetch(`https://www.googleapis.com/youtube/v3/videos?id=${videoId}&part=snippet&key=AIzaSyAAupl0BF00KNHLJHhztrW4mNWzCpmBOo0`)
+            .then(response => response.json())
+            .then(data => {
+                const videoTitle = data.items[0].snippet.title;
+                // For simplicity, let's assume the artist name is the same as the channel title
+                const artist = data.items[0].snippet.channelTitle;
+                fetchLyrics(artist, videoTitle);
+            })
+            .catch(error => {
+                console.error('Error fetching video details:', error);
+                const lyricsContainer = document.getElementById('lyrics');
+                lyricsContainer.textContent = 'Lyrics not available.';
+            });
+        }
+
+        // Call the initializePage function when the page loads
+        window.onload = initializePage;
+    </script>
+</body>
+</html>
+
     <div id="lyrics"></div>
 
     <script>
