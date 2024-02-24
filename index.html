@@ -35,7 +35,8 @@
                 data.tracks.track.forEach(track => {
                     const trackName = track.name;
                     const artistName = track.artist.name;
-                    const thumbnailUrl = track.image[0]['#text']; // Get the first image as thumbnail
+                    const thumbnails = track.image.filter(image => image.size === 'large');
+                    const thumbnailUrl = thumbnails.length > 0 ? thumbnails[0]['#text'] : ''; // Get the first large image as thumbnail
                     const videoUrl = `https://www.youtube.com/watch?v=${track.url.split('/').pop()}`; // Construct YouTube video URL
 
                     const videoElement = document.createElement('div');
