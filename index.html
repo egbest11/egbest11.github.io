@@ -11,12 +11,18 @@
         <!-- Trending music videos will be displayed here -->
     </section>
 
+    <!-- Pagination -->
+    <button id="loadMore">Load More</button>
+
     <!-- JavaScript code for fetching trending music videos -->
     <script>
+        let page = 1; // Initial page number
+        const limit = 10; // Number of items per page
+
         // Function to fetch trending music videos from Last.fm API
         function fetchTrendingMusicVideos() {
-            const apiKey = '37abe2fa1a2320d0e6ec486c6c92b3bb'; // Replace 'YOUR_LAST_FM_API_KEY' with your actual API key
-            const apiUrl = `https://ws.audioscrobbler.com/2.0/?method=chart.gettoptracks&api_key=${apiKey}&format=json&limit=10`;
+            const apiKey = '37abe2fa1a2320d0e6ec486c6c92b3bb';
+            const apiUrl = `https://ws.audioscrobbler.com/2.0/?method=chart.gettoptracks&api_key=${apiKey}&format=json&limit=${limit}&page=${page}`;
 
             fetch(apiUrl)
             .then(response => response.json())
@@ -25,7 +31,7 @@
                 data.tracks.track.forEach(track => {
                     const trackName = track.name;
                     const artistName = track.artist.name;
-                    const videoUrl = `https://www.youtube.com/watch?v=${track.url.split('/').pop()}`; // Construct YouTube video URL
+                    const videoUrl = `https://www.youtube.com/watch?v=${track.url.split('/').pop()}`;
 
                     const videoElement = document.createElement('div');
                     videoElement.innerHTML = `
@@ -41,8 +47,17 @@
             });
         }
 
+        // Function to load more videos when clicking the "Load More" button
+        function loadMore() {
+            page++; // Increment page number
+            fetchTrendingMusicVideos(); // Fetch more videos
+        }
+
         // Call the fetchTrendingMusicVideos function when the page loads
         window.onload = fetchTrendingMusicVideos;
+
+        // Add event listener to the "Load More" button
+        document.getElementById('loadMore').addEventListener('click', loadMore);
     </script>
 </body>
 </html>
