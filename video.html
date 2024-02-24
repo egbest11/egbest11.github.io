@@ -16,19 +16,20 @@
             return urlParams.get('id');
         }
 
-        // Function to fetch lyrics based on video title
-        function fetchLyrics(videoTitle) {
-            const apiUrl = `https://api.lyrics.ovh/v1/${encodeURIComponent(videoTitle)}`;
+        // Function to fetch lyrics based on artist and song title
+        function fetchLyrics(artist, title) {
+            const apiUrl = `https://api.lyrics.ovh/v1/${encodeURIComponent(artist)}/${encodeURIComponent(title)}`;
 
             fetch(apiUrl)
-            .then(response => response.json())
-            .then(data => {
-                if (data.lyrics) {
-                    const lyricsContainer = document.getElementById('lyrics');
-                    lyricsContainer.textContent = data.lyrics;
-                } else {
+            .then(response => {
+                if (!response.ok) {
                     throw new Error('Lyrics not found');
                 }
+                return response.json();
+            })
+            .then(data => {
+                const lyricsContainer = document.getElementById('lyrics');
+                lyricsContainer.textContent = data.lyrics;
             })
             .catch(error => {
                 console.error('Error fetching lyrics:', error);
@@ -55,11 +56,13 @@
             embedYouTubeVideo(videoId);
 
             // Fetch video title and use it to fetch lyrics
-            fetch(`https://www.googleapis.com/youtube/v3/videos?id=${videoId}&part=snippet&key=AIzaSyAAupl0BF00KNHLJHhztrW4mNWzCpmBOo0`)
+            fetch(`https://www.googleapis.com/youtube/v3/videos?id=${videoId}&part=snippet&key=YOUR_YOUTUBE_API_KEY`)
             .then(response => response.json())
             .then(data => {
                 const videoTitle = data.items[0].snippet.title;
-                fetchLyrics(videoTitle);
+                // For simplicity, let's assume the artist name is the same as the channel title
+                const artist = data.items[0].snippet.channelTitle;
+                fetchLyrics(artist, videoTitle);
             })
             .catch(error => {
                 console.error('Error fetching video details:', error);
