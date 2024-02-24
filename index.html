@@ -21,10 +21,10 @@
     <script>
         let page = 1;
 
-        // Function to fetch trending music videos from Last.fm API
+        // Function to fetch trending music videos from YouTube Data API
         function fetchTrendingMusicVideos() {
-            const apiKey = '37abe2fa1a2320d0e6ec486c6c92b3bb'; // Replace 'YOUR_LAST_FM_API_KEY' with your actual API key
-            const apiUrl = `https://ws.audioscrobbler.com/2.0/?method=chart.gettoptracks&api_key=${apiKey}&format=json&limit=10&page=${page}`;
+            const apiKey = 'YOUR_YOUTUBE_API_KEY'; // Replace 'YOUR_YOUTUBE_API_KEY' with your actual YouTube Data API key
+            const apiUrl = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&part=snippet&type=video&maxResults=10&q=music`;
 
             fetch(apiUrl)
             .then(response => response.json())
@@ -32,19 +32,17 @@
                 const trendingMusicVideosContainer = document.getElementById('trendingMusicVideos');
                 trendingMusicVideosContainer.innerHTML = ''; // Clear previous videos
 
-                data.tracks.track.forEach(track => {
-                    const trackName = track.name;
-                    const artistName = track.artist.name;
-                    const thumbnails = track.image.filter(image => image.size === 'large');
-                    const thumbnailUrl = thumbnails.length > 0 ? thumbnails[0]['#text'] : ''; // Get the first large image as thumbnail
-                    const videoUrl = `https://www.youtube.com/watch?v=${track.url.split('/').pop()}`; // Construct YouTube video URL
+                data.items.forEach(item => {
+                    const videoId = item.id.videoId;
+                    const videoTitle = item.snippet.title;
+                    const thumbnailUrl = item.snippet.thumbnails.medium.url;
+                    const videoUrl = `https://www.youtube.com/watch?v=${videoId}`; // Construct YouTube video URL
 
                     const videoElement = document.createElement('div');
                     videoElement.innerHTML = `
-                        <h2>${trackName}</h2>
-                        <p>Artist: ${artistName}</p>
+                        <h2>${videoTitle}</h2>
                         <a href="${videoUrl}" target="_blank">
-                            <img src="${thumbnailUrl}" alt="${trackName}">
+                            <img src="${thumbnailUrl}" alt="${videoTitle}">
                             Watch Video
                         </a>
                     `;
