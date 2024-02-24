@@ -1,35 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-TP48QBR5');</script>
-<!-- End Google Tag Manager -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trending Songs</title>
+    <title>Trending Music Videos</title>
+
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-TP48QBR5');</script>
+    <!-- End Google Tag Manager -->
+
+    <!-- CSS styles for the search form and trending videos -->
+    <style>
+        #searchForm {
+            margin-bottom: 20px;
+        }
+        #trendingMusicVideos {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .videoItem {
+            width: 30%;
+            margin: 0 1.5% 20px;
+        }
+        .videoItem img {
+            width: 100%;
+            height: auto;
+        }
+    </style>
 </head>
 <body>
     <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TP48QBR5"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
-    <h1>Trending Songs on YouTube</h1>
-    <div id="trendingVideos"></div>
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TP48QBR5"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
 
+    <!-- Search input field -->
+    <form id="searchForm">
+        <input type="text" id="searchQuery" placeholder="Search...">
+        <button type="submit">Search</button>
+    </form>
+
+    <!-- Trending music videos section -->
+    <section id="trendingMusicVideos">
+        <!-- Trending music videos will be displayed here -->
+    </section>
+
+    <!-- JavaScript code for fetching trending music videos and handling search -->
     <script>
-        // Function to fetch trending videos from YouTube
-        function fetchTrendingVideos() {
+        // Function to fetch trending music videos from YouTube
+        function fetchTrendingMusicVideos() {
             const apiKey = 'AIzaSyAAupl0BF00KNHLJHhztrW4mNWzCpmBOo0';
-            const apiUrl = `https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&maxResults=10&regionCode=US&key=${apiKey}`;
+            const apiUrl = `https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&maxResults=10&regionCode=US&type=video&videoCategoryId=10&key=${apiKey}`;
 
             fetch(apiUrl)
             .then(response => response.json())
             .then(data => {
-                const trendingVideosContainer = document.getElementById('trendingVideos');
+                const trendingMusicVideosContainer = document.getElementById('trendingMusicVideos');
                 data.items.forEach(video => {
                     const videoTitle = video.snippet.title;
                     const videoId = video.id;
@@ -37,6 +67,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     const channelTitle = video.snippet.channelTitle;
 
                     const videoElement = document.createElement('div');
+                    videoElement.classList.add('videoItem');
                     videoElement.innerHTML = `
                         <h2>${videoTitle}</h2>
                         <p>Channel: ${channelTitle}</p>
@@ -44,16 +75,128 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                             <img src="${videoThumbnail}" alt="${videoTitle}">
                         </a>
                     `;
-                    trendingVideosContainer.appendChild(videoElement);
+                    trendingMusicVideosContainer.appendChild(videoElement);
                 });
             })
             .catch(error => {
-                console.error('Error fetching trending videos:', error);
+                console.error('Error fetching trending music videos:', error);
             });
         }
 
-        // Call the fetchTrendingVideos function when the page loads
-        window.onload = fetchTrendingVideos;
+        // Function to handle search form submission
+        function handleSearch(event) {
+            event.preventDefault();
+            const searchQuery = document.getElementById('searchQuery').value;
+            // Perform search based on the search query
+            console.log('Search query:', searchQuery);
+        }
+
+        // Call the fetchTrendingMusicVideos function when the page loads
+        window.onload = fetchTrendingMusicVideos;
+
+        // Add event listener to the search form
+        document.getElementById('searchForm').addEventListener('submit', handleSearch);
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trending Music Videos</title>
+
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-TP48QBR5');</script>
+    <!-- End Google Tag Manager -->
+
+    <!-- CSS styles for the search form and trending videos -->
+    <style>
+        #searchForm {
+            margin-bottom: 20px;
+        }
+        #trendingMusicVideos {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .videoItem {
+            width: 30%;
+            margin: 0 1.5% 20px;
+        }
+        .videoItem img {
+            width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TP48QBR5"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <!-- Search input field -->
+    <form id="searchForm">
+        <input type="text" id="searchQuery" placeholder="Search...">
+        <button type="submit">Search</button>
+    </form>
+
+    <!-- Trending music videos section -->
+    <section id="trendingMusicVideos">
+        <!-- Trending music videos will be displayed here -->
+    </section>
+
+    <!-- JavaScript code for fetching trending music videos and handling search -->
+    <script>
+        // Function to fetch trending music videos from YouTube
+        function fetchTrendingMusicVideos() {
+            const apiKey = 'AIzaSyAAupl0BF00KNHLJHhztrW4mNWzCpmBOo0';
+            const apiUrl = `https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&maxResults=10&regionCode=US&type=video&videoCategoryId=10&key=${apiKey}`;
+
+            fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                const trendingMusicVideosContainer = document.getElementById('trendingMusicVideos');
+                data.items.forEach(video => {
+                    const videoTitle = video.snippet.title;
+                    const videoId = video.id;
+                    const videoThumbnail = video.snippet.thumbnails.default.url;
+                    const channelTitle = video.snippet.channelTitle;
+
+                    const videoElement = document.createElement('div');
+                    videoElement.classList.add('videoItem');
+                    videoElement.innerHTML = `
+                        <h2>${videoTitle}</h2>
+                        <p>Channel: ${channelTitle}</p>
+                        <a href="video.html?id=${videoId}">
+                            <img src="${videoThumbnail}" alt="${videoTitle}">
+                        </a>
+                    `;
+                    trendingMusicVideosContainer.appendChild(videoElement);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching trending music videos:', error);
+            });
+        }
+
+        // Function to handle search form submission
+        function handleSearch(event) {
+            event.preventDefault();
+            const searchQuery = document.getElementById('searchQuery').value;
+            // Perform search based on the search query
+            console.log('Search query:', searchQuery);
+        }
+
+        // Call the fetchTrendingMusicVideos function when the page loads
+        window.onload = fetchTrendingMusicVideos;
+
+        // Add event listener to the search form
+        document.getElementById('searchForm').addEventListener('submit', handleSearch);
     </script>
 </body>
 </html>
