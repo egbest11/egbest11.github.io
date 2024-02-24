@@ -9,26 +9,16 @@
     <div id="player"></div>
 
     <script>
-        // Function to extract query parameter from URL
-        function getParameterByName(name, url) {
-            if (!url) url = window.location.href;
-            name = name.replace(/[\[\]]/g, '\\$&');
-            var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-                results = regex.exec(url);
-            if (!results) return null;
-            if (!results[2]) return '';
-            return decodeURIComponent(results[2].replace(/\+/g, ' '));
-        }
+        // Extract the video ID from the URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const videoId = urlParams.get('id');
 
-        // Get video ID from URL
-        var videoId = getParameterByName('id');
-
-        // Embed YouTube video
-        var playerDiv = document.getElementById('player');
-        var playerFrame = document.createElement('iframe');
+        // Embed the YouTube video using an iframe
+        const playerDiv = document.getElementById('player');
+        const playerFrame = document.createElement('iframe');
         playerFrame.setAttribute('width', '560');
         playerFrame.setAttribute('height', '315');
-        playerFrame.setAttribute('src', 'https://www.youtube.com/embed/ZAz3rnLGthg');
+        playerFrame.setAttribute('src', `https://www.youtube.com/embed/${videoId}`);
         playerFrame.setAttribute('frameborder', '0');
         playerFrame.setAttribute('allowfullscreen', '');
         playerDiv.appendChild(playerFrame);
