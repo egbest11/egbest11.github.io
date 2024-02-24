@@ -12,26 +12,30 @@
     </section>
 
     <!-- Pagination -->
-    <button id="loadMore">Load More</button>
+    <div id="pagination">
+        <button id="prevPage" disabled>Previous Page</button>
+        <button id="nextPage">Next Page</button>
+    </div>
 
-    <!-- JavaScript code for fetching trending music videos -->
+    <!-- JavaScript code for fetching trending music videos and pagination -->
     <script>
-        let page = 1; // Initial page number
-        const limit = 10; // Number of items per page
+        let page = 1;
 
         // Function to fetch trending music videos from Last.fm API
         function fetchTrendingMusicVideos() {
-            const apiKey = '37abe2fa1a2320d0e6ec486c6c92b3bb';
-            const apiUrl = `https://ws.audioscrobbler.com/2.0/?method=chart.gettoptracks&api_key=${apiKey}&format=json&limit=${limit}&page=${page}`;
+            const apiKey = '37abe2fa1a2320d0e6ec486c6c92b3bb'; // Replace 'YOUR_LAST_FM_API_KEY' with your actual API key
+            const apiUrl = `https://ws.audioscrobbler.com/2.0/?method=chart.gettoptracks&api_key=${apiKey}&format=json&limit=10&page=${page}`;
 
             fetch(apiUrl)
             .then(response => response.json())
             .then(data => {
                 const trendingMusicVideosContainer = document.getElementById('trendingMusicVideos');
+                trendingMusicVideosContainer.innerHTML = ''; // Clear previous videos
+
                 data.tracks.track.forEach(track => {
                     const trackName = track.name;
                     const artistName = track.artist.name;
-                    const videoUrl = `https://www.youtube.com/watch?v=${track.url.split('/').pop()}`;
+                    const videoUrl = `https://www.youtube.com/watch?v=${track.url.split('/').pop()}`; // Construct YouTube video URL
 
                     const videoElement = document.createElement('div');
                     videoElement.innerHTML = `
@@ -41,23 +45,28 @@
                     `;
                     trendingMusicVideosContainer.appendChild(videoElement);
                 });
+
+                document.getElementById('prevPage').disabled = page === 1; // Disable Previous Page button on first page
             })
             .catch(error => {
                 console.error('Error fetching trending music videos:', error);
             });
         }
 
-        // Function to load more videos when clicking the "Load More" button
-        function loadMore() {
-            page++; // Increment page number
-            fetchTrendingMusicVideos(); // Fetch more videos
-        }
+        // Event listener for Next Page button
+        document.getElementById('nextPage').addEventListener('click', () => {
+            page++;
+            fetchTrendingMusicVideos();
+        });
+
+        // Event listener for Previous Page button
+        document.getElementById('prevPage').addEventListener('click', () => {
+            page--;
+            fetchTrendingMusicVideos();
+        });
 
         // Call the fetchTrendingMusicVideos function when the page loads
         window.onload = fetchTrendingMusicVideos;
-
-        // Add event listener to the "Load More" button
-        document.getElementById('loadMore').addEventListener('click', loadMore);
     </script>
 </body>
 </html>
