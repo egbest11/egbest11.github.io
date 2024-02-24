@@ -35,13 +35,17 @@
                 data.tracks.track.forEach(track => {
                     const trackName = track.name;
                     const artistName = track.artist.name;
+                    const thumbnailUrl = track.image[0]['#text']; // Get the first image as thumbnail
                     const videoUrl = `https://www.youtube.com/watch?v=${track.url.split('/').pop()}`; // Construct YouTube video URL
 
                     const videoElement = document.createElement('div');
                     videoElement.innerHTML = `
                         <h2>${trackName}</h2>
                         <p>Artist: ${artistName}</p>
-                        <a href="${videoUrl}" target="_blank">Watch Video</a>
+                        <a href="${videoUrl}" target="_blank">
+                            <img src="${thumbnailUrl}" alt="${trackName}">
+                            Watch Video
+                        </a>
                     `;
                     trendingMusicVideosContainer.appendChild(videoElement);
                 });
