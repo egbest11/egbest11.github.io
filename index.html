@@ -15,6 +15,11 @@
         <div id="trendingMusicVideos"></div>
     </div>
 
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TP48QBR5"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
     <script>
         // Function to fetch trending music videos
         function fetchTrendingMusicVideos() {
@@ -22,7 +27,12 @@
             const apiUrl = `https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&regionCode=US&maxResults=10&videoCategoryId=10&key=${apiKey}`;
 
             fetch(apiUrl)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to fetch trending music videos');
+                }
+                return response.json();
+            })
             .then(data => {
                 const trendingMusicVideosContainer = document.getElementById('trendingMusicVideos');
 
