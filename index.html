@@ -5,150 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trending Music Videos</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f0f0;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        #results {
-            margin-top: 20px;
-        }
-
-        .video {
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            padding: 10px;
-            transition: all 0.3s ease;
-        }
-
-        .video:hover {
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .thumbnail {
-            width: 120px;
-            height: 90px;
-            margin-right: 10px;
-        }
-
-        .info {
-            flex-grow: 1;
-        }
-
-        .title {
-            font-size: 16px;
-            margin-bottom: 5px;
-        }
-
-        .channel {
-            font-size: 14px;
-            color: #666;
-        }
-
-        .watchButton {
-            background-color: #007bff;
-            color: #fff;
-            padding: 5px 10px;
-            border: none;
-            border-radius: 3px;
-            text-decoration: none;
-            transition: background-color 0.3s ease;
-        }
-
-        .watchButton:hover {
-            background-color: #0056b3;
-        }
+        /* CSS styles */
     </style>
 </head>
 <body>
+    <!-- HTML content -->
     <div class="container">
-        <h1>YouTube Music Search</h1>
-        <input type="text" id="searchInput" placeholder="Enter search query...">
-        <button onclick="search()">Search</button>
-        <div id="results"></div>
-    </div>
-
-    <div class="container">
-        <h2>Trending Music Videos</h2>
+        <h1>Trending Music Videos</h1>
         <div id="trendingMusicVideos"></div>
     </div>
 
     <script>
-        function search() {
-            var searchTerm = document.getElementById("searchInput").value;
-            var apiKey = "YOUR_YOUTUBE_API_KEY";
-            var url = "https://www.googleapis.com/youtube/v3/search?part=snippet&q=" + encodeURIComponent(searchTerm) + "&type=video&key=" + apiKey;
-
-            fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                displayResults(data.items);
-            })
-            .catch(error => console.log('Error:', error));
-        }
-
-        function displayResults(videos) {
-            var resultsContainer = document.getElementById("results");
-            resultsContainer.innerHTML = "";
-
-            if (!videos || videos.length === 0) {
-                resultsContainer.innerHTML = "No videos found.";
-                return;
-            }
-
-            videos.forEach(video => {
-                var videoDiv = document.createElement("div");
-                videoDiv.classList.add("video");
-                videoDiv.onclick = function() {
-                    window.location.href = "video.html?id=" + video.id.videoId;
-                };
-
-                var thumbnail = document.createElement("img");
-                thumbnail.classList.add("thumbnail");
-                thumbnail.src = video.snippet.thumbnails.medium.url;
-
-                var infoDiv = document.createElement("div");
-                infoDiv.classList.add("info");
-
-                var title = document.createElement("div");
-                title.classList.add("title");
-                title.textContent = video.snippet.title;
-
-                var channel = document.createElement("div");
-                channel.classList.add("channel");
-                channel.textContent = "Channel: " + video.snippet.channelTitle;
-
-                var watchButton = document.createElement("a");
-                watchButton.classList.add("watchButton");
-                watchButton.href = "video.html?id=" + video.id.videoId;
-                watchButton.textContent = "Watch Video";
-
-                infoDiv.appendChild(title);
-                infoDiv.appendChild(channel);
-
-                videoDiv.appendChild(thumbnail);
-                videoDiv.appendChild(infoDiv);
-                videoDiv.appendChild(watchButton);
-
-                resultsContainer.appendChild(videoDiv);
-            });
-        }
-
         // Function to fetch trending music videos
         function fetchTrendingMusicVideos() {
-            const apiKey = 'YOUR_YOUTUBE_API_KEY';
+            const apiKey = 'AIzaSyAAupl0BF00KNHLJHhztrW4mNWzCpmBOo0';
             const apiUrl = `https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&regionCode=US&maxResults=10&videoCategoryId=10&key=${apiKey}`;
 
             fetch(apiUrl)
@@ -156,39 +26,45 @@
             .then(data => {
                 const trendingMusicVideosContainer = document.getElementById('trendingMusicVideos');
 
-                data.items.forEach(item => {
-                    const videoId = item.id;
-                    const videoTitle = item.snippet.title;
-                    const thumbnailUrl = item.snippet.thumbnails.medium.url;
-                    const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
+                if (data.items && data.items.length > 0) {
+                    data.items.forEach(item => {
+                        const videoId = item.id;
+                        const videoTitle = item.snippet.title;
+                        const thumbnailUrl = item.snippet.thumbnails.medium.url;
+                        const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
 
-                    const videoDiv = document.createElement('div');
-                    videoDiv.classList.add('video');
-                    videoDiv.onclick = function() {
-                        window.location.href = `video.html?id=${videoId}`;
-                    };
+                        const videoDiv = document.createElement('div');
+                        videoDiv.classList.add('video');
+                        videoDiv.onclick = function() {
+                            window.location.href = `video.html?id=${videoId}`;
+                        };
 
-                    const thumbnail = document.createElement('img');
-                    thumbnail.classList.add('thumbnail');
-                    thumbnail.src = thumbnailUrl;
-                    thumbnail.alt = videoTitle;
+                        const thumbnail = document.createElement('img');
+                        thumbnail.classList.add('thumbnail');
+                        thumbnail.src = thumbnailUrl;
+                        thumbnail.alt = videoTitle;
 
-                    const infoDiv = document.createElement('div');
-                    infoDiv.classList.add('info');
+                        const infoDiv = document.createElement('div');
+                        infoDiv.classList.add('info');
 
-                    const title = document.createElement('div');
-                    title.classList.add('title');
-                    title.textContent = videoTitle;
+                        const title = document.createElement('div');
+                        title.classList.add('title');
+                        title.textContent = videoTitle;
 
-                    infoDiv.appendChild(title);
-                    videoDiv.appendChild(thumbnail);
-                    videoDiv.appendChild(infoDiv);
+                        infoDiv.appendChild(title);
+                        videoDiv.appendChild(thumbnail);
+                        videoDiv.appendChild(infoDiv);
 
-                    trendingMusicVideosContainer.appendChild(videoDiv);
-                });
+                        trendingMusicVideosContainer.appendChild(videoDiv);
+                    });
+                } else {
+                    trendingMusicVideosContainer.textContent = 'No trending music videos found.';
+                }
             })
             .catch(error => {
                 console.error('Error fetching trending music videos:', error);
+                const trendingMusicVideosContainer = document.getElementById('trendingMusicVideos');
+                trendingMusicVideosContainer.textContent = 'An error occurred while fetching trending music videos.';
             });
         }
 
