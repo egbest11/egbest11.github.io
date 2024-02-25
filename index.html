@@ -220,6 +220,21 @@
             document.getElementById("results").style.display = "none";
             document.getElementById("trendingMusicVideos").style.display = "block";
         }
+
+        // Function to show instructions for adding to home screen on iOS
+        function showAddToHomeScreen() {
+            alert("To add this web app to your home screen, press the 'Share' button and then select 'Add to Home Screen'.");
+        }
+
+        // Check if the app is running in standalone mode (iOS)
+        if (window.navigator.standalone) {
+            console.log("App is running in standalone mode (added to home screen)");
+            // Optionally, you can perform additional actions if the app is in standalone mode
+        } else {
+            console.log("App is not running in standalone mode");
+            // Optionally, you can display a prompt to add the app to the home screen
+            // showAddToHomeScreen();
+        }
     </script>
 </body>
 </html>
