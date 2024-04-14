@@ -20,37 +20,44 @@
     #fishControls {
         margin-bottom: 20px;
     }
-    input[type="text"] {
-        width: 200px;
-        padding: 5px;
-        margin: 5px;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-    }
-    button {
+    .button {
         font-size: 1em;
         padding: 10px 20px;
         margin: 0 5px;
         cursor: pointer;
+        border: none;
+        border-radius: 5px;
+        background-color: #007bff;
+        color: #fff;
+        transition: background-color 0.3s;
+    }
+    .button:hover {
+        background-color: #0056b3;
+    }
+    .button:active {
+        background-color: #004080;
+    }
+    .button:focus {
+        outline: none;
     }
 </style>
 </head>
 <body>
 
 <div id="display">00:00:00.000</div>
-<button id="startStop" onclick="startStop()">Start</button>
-<button id="reset" onclick="reset()">Reset</button>
+<button id="startStop" onclick="startStop()" class="button">Start</button>
+<button id="reset" onclick="reset()" class="button">Reset</button>
 
 <div id="fishCounter">Fish Caught: 0</div>
 <div id="fishControls">
-    <button id="addFish" onclick="catchFish()">+ Catch Fish</button>
-    <button id="removeFish" onclick="releaseFish()">- Release Fish</button>
+    <button id="addFish" onclick="catchFish()" class="button">+ Catch Fish</button>
+    <button id="removeFish" onclick="releaseFish()" class="button">- Release Fish</button>
 </div>
 
 <div id="userData">
     <input type="text" id="comment" placeholder="Add a comment">
     <input type="date" id="date">
-    <button id="saveData" onclick="saveData()">Save Data</button>
+    <button id="saveData" onclick="saveData()" class="button">Save Data</button>
 </div>
 
 <script>
