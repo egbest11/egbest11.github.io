@@ -9,6 +9,10 @@
         font-family: Arial, sans-serif;
         text-align: center;
     }
+    #currentTime {
+        font-size: 1em;
+        margin-bottom: 20px;
+    }
     #display {
         font-size: 2em;
         margin-bottom: 20px;
@@ -44,6 +48,8 @@
 </head>
 <body>
 
+<div id="currentTime">Current Time: </div>
+
 <div id="display">00:00:00.000</div>
 <button id="startStop" onclick="startStop()" class="button">Start</button>
 <button id="reset" onclick="reset()" class="button">Reset</button>
@@ -61,8 +67,19 @@
 </div>
 
 <script>
-    var timer; // Variable to hold the setInterval() function
+    // Function to update current time
+    function updateCurrentTime() {
+        var now = new Date();
+        var currentTimeString = now.toLocaleString();
+        document.getElementById('currentTime').textContent = "Current Time: " + currentTimeString;
+    }
 
+    // Update current time every second
+    setInterval(updateCurrentTime, 1000);
+    
+    // Remaining code remains the same...
+    
+    var timer; // Variable to hold the setInterval() function
     var hours = 0;
     var minutes = 0;
     var seconds = 0;
@@ -145,6 +162,10 @@
         if (date !== "") {
             data += "\nDate: " + date;
         }
+        // Adding start and end time
+        var startTime = new Date(Date.now() - (hours * 3600000) - (minutes * 60000) - (seconds * 1000) - milliseconds);
+        var endTime = new Date();
+        data += "\nStart Time: " + startTime.toLocaleString() + "\nEnd Time: " + endTime.toLocaleString();
         var blob = new Blob([data], { type: "text/plain;charset=utf-8" });
         saveAs(blob, "fish_data.txt");
     }
