@@ -9,21 +9,48 @@
         font-family: Arial, sans-serif;
         text-align: center;
     }
-    textarea {
+    .container {
         width: 80%;
-        height: 300px;
         margin: 20px auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+    label {
+        font-weight: bold;
+    }
+    textarea {
+        width: 100%;
+        height: 200px;
+        margin-top: 10px;
         padding: 10px;
         resize: none;
+    }
+    .file-input {
+        margin-bottom: 20px;
     }
 </style>
 </head>
 <body>
 
-<h1>Read Saved Data</h1>
+<div class="container">
+    <h1>Read Saved Data</h1>
 
-<input type="file" id="fileInput" onchange="loadFile()" accept=".txt"><br>
-<textarea id="fileContents" readonly></textarea>
+    <input type="file" id="fileInput" onchange="loadFile()" accept=".txt" class="file-input"><br>
+
+    <label for="fishCount">Fish Count:</label><br>
+    <textarea id="fishCount" readonly></textarea>
+
+    <label for="timeElapsed">Time Elapsed:</label><br>
+    <textarea id="timeElapsed" readonly></textarea>
+
+    <label for="comment">Comment:</label><br>
+    <textarea id="comment" readonly></textarea>
+
+    <label for="date">Date:</label><br>
+    <textarea id="date" readonly></textarea>
+</div>
 
 <script>
     function loadFile() {
@@ -33,9 +60,36 @@
         var reader = new FileReader();
         reader.onload = function(e) {
             var fileContents = e.target.result;
-            document.getElementById('fileContents').value = fileContents;
+            parseData(fileContents);
         };
         reader.readAsText(file);
+    }
+
+    function parseData(data) {
+        var lines = data.split('\n');
+
+        var fishCount = '';
+        var timeElapsed = '';
+        var comment = '';
+        var date = '';
+
+        for (var i = 0; i < lines.length; i++) {
+            var line = lines[i];
+            if (line.startsWith('Fish Caught:')) {
+                fishCount = line.substring(13).trim();
+            } else if (line.startsWith('Time Elapsed:')) {
+                timeElapsed = line.substring(14).trim();
+            } else if (line.startsWith('Comment:')) {
+                comment = line.substring(8).trim();
+            } else if (line.startsWith('Date:')) {
+                date = line.substring(5).trim();
+            }
+        }
+
+        document.getElementById('fishCount').value = fishCount;
+        document.getElementById('timeElapsed').value = timeElapsed;
+        document.getElementById('comment').value = comment;
+        document.getElementById('date').value = date;
     }
 </script>
 
