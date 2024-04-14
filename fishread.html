@@ -50,6 +50,12 @@
 
     <label for="date">Date:</label><br>
     <textarea id="date" readonly></textarea>
+
+    <label for="startTime">Start Time:</label><br>
+    <textarea id="startTime" readonly></textarea>
+
+    <label for="endTime">End Time:</label><br>
+    <textarea id="endTime" readonly></textarea>
 </div>
 
 <script>
@@ -72,6 +78,8 @@
         var timeElapsed = '';
         var comment = '';
         var date = '';
+        var startTime = '';
+        var endTime = '';
 
         for (var i = 0; i < lines.length; i++) {
             var line = lines[i];
@@ -83,6 +91,10 @@
                 comment = line.substring(8).trim();
             } else if (line.startsWith('Date:')) {
                 date = line.substring(5).trim();
+            } else if (line.startsWith('Start Time:')) {
+                startTime = line.substring(11).trim();
+            } else if (line.startsWith('End Time:')) {
+                endTime = line.substring(9).trim();
             }
         }
 
@@ -90,6 +102,8 @@
         document.getElementById('timeElapsed').value = timeElapsed;
         document.getElementById('comment').value = comment;
         document.getElementById('date').value = date;
+        document.getElementById('startTime').value = startTime;
+        document.getElementById('endTime').value = endTime;
     }
 </script>
 
