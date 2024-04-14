@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Read Saved Data</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+    }
+    textarea {
+        width: 80%;
+        height: 300px;
+        margin: 20px auto;
+        padding: 10px;
+        resize: none;
+    }
+</style>
+</head>
+<body>
+
+<h1>Read Saved Data</h1>
+
+<input type="file" id="fileInput" onchange="loadFile()" accept=".txt"><br>
+<textarea id="fileContents" readonly></textarea>
+
+<script>
+    function loadFile() {
+        var fileInput = document.getElementById('fileInput');
+        var file = fileInput.files[0];
+
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            var fileContents = e.target.result;
+            document.getElementById('fileContents').value = fileContents;
+        };
+        reader.readAsText(file);
+    }
+</script>
+
+</body>
+</html>
