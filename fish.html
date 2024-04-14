@@ -20,6 +20,13 @@
     #fishControls {
         margin-bottom: 20px;
     }
+    input[type="text"] {
+        width: 200px;
+        padding: 5px;
+        margin: 5px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
     button {
         font-size: 1em;
         padding: 10px 20px;
@@ -38,6 +45,11 @@
 <div id="fishControls">
     <button id="addFish" onclick="catchFish()">+ Catch Fish</button>
     <button id="removeFish" onclick="releaseFish()">- Release Fish</button>
+</div>
+
+<div id="userData">
+    <input type="text" id="comment" placeholder="Add a comment">
+    <input type="date" id="date">
     <button id="saveData" onclick="saveData()">Save Data</button>
 </div>
 
@@ -117,7 +129,15 @@
 
     // Save data to a text file
     function saveData() {
+        var comment = document.getElementById("comment").value;
+        var date = document.getElementById("date").value;
         var data = "Fish Caught: " + fishCount + "\nTime Elapsed: " + hours + " hours, " + minutes + " minutes, " + seconds + " seconds, " + milliseconds + " milliseconds";
+        if (comment !== "") {
+            data += "\nComment: " + comment;
+        }
+        if (date !== "") {
+            data += "\nDate: " + date;
+        }
         var blob = new Blob([data], { type: "text/plain;charset=utf-8" });
         saveAs(blob, "fish_data.txt");
     }
