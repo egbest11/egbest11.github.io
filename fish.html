@@ -36,8 +36,9 @@
 
 <div id="fishCounter">Fish Caught: 0</div>
 <div id="fishControls">
-    <button id="addFish" onclick="catchFish()">+</button>
-    <button id="removeFish" onclick="releaseFish()">-</button>
+    <button id="addFish" onclick="catchFish()">+ Catch Fish</button>
+    <button id="removeFish" onclick="releaseFish()">- Release Fish</button>
+    <button id="saveData" onclick="saveData()">Save Data</button>
 </div>
 
 <script>
@@ -113,7 +114,14 @@
             updateFishCounter();
         }
     }
-</script>
 
+    // Save data to a text file
+    function saveData() {
+        var data = "Fish Caught: " + fishCount + "\nTime Elapsed: " + hours + " hours, " + minutes + " minutes, " + seconds + " seconds, " + milliseconds + " milliseconds";
+        var blob = new Blob([data], { type: "text/plain;charset=utf-8" });
+        saveAs(blob, "fish_data.txt");
+    }
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js"></script>
 </body>
 </html>
