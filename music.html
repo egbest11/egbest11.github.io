@@ -88,31 +88,33 @@
         </div>
 
         <!-- Main content with trending music videos -->
-        <div class="main-content" id="trendingMusicVideos">
-            <!-- Trending music videos will be displayed here -->
+        <div class="main-content" id="searchResults">
+            <!-- Search results will be displayed here -->
         </div>
     </div>
 
     <!-- JavaScript code for fetching trending music videos and handling search -->
     <script>
-        // Function to fetch trending music videos
-        function fetchTrendingMusicVideos() {
+        // Function to fetch search results
+        function searchVideos(searchTerm) {
             const apiKey = 'AIzaSyAAupl0BF00KNHLJHhztrW4mNWzCpmBOo0';
-            const apiUrl = `https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&regionCode=US&maxResults=10&videoCategoryId=10&key=${apiKey}`;
+            const apiUrl = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&part=snippet&type=video&maxResults=10&q=${encodeURIComponent(searchTerm)}`;
 
             fetch(apiUrl)
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Failed to fetch trending music videos');
+                    throw new Error('Failed to fetch search results');
                 }
                 return response.json();
             })
             .then(data => {
-                const trendingMusicVideosContainer = document.getElementById('trendingMusicVideos');
+                const searchResultsContainer = document.getElementById('searchResults');
 
                 if (data.items && data.items.length > 0) {
+                    searchResultsContainer.innerHTML = ''; // Clear previous search results
+
                     data.items.forEach(item => {
-                        const videoId = item.id;
+                        const videoId = item.id.videoId;
                         const videoTitle = item.snippet.title;
                         const thumbnailUrl = item.snippet.thumbnails.medium.url;
                         const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
@@ -135,28 +137,24 @@
                         videoDiv.appendChild(thumbnail);
                         videoDiv.appendChild(title);
 
-                        trendingMusicVideosContainer.appendChild(videoDiv);
+                        searchResultsContainer.appendChild(videoDiv);
                     });
                 } else {
-                    trendingMusicVideosContainer.textContent = 'No trending music videos found.';
+                    searchResultsContainer.textContent = 'No search results found.';
                 }
             })
             .catch(error => {
-                console.error('Error fetching trending music videos:', error);
-                const trendingMusicVideosContainer = document.getElementById('trendingMusicVideos');
-                trendingMusicVideosContainer.textContent = 'An error occurred while fetching trending music videos.';
+                console.error('Error fetching search results:', error);
+                const searchResultsContainer = document.getElementById('searchResults');
+                searchResultsContainer.textContent = 'An error occurred while fetching search results.';
             });
         }
-
-        // Call the fetchTrendingMusicVideos function when the page loads
-        window.onload = fetchTrendingMusicVideos;
 
         // Function to handle search button click
         document.getElementById('searchButton').addEventListener('click', function() {
             const searchTerm = document.getElementById('searchInput').value.trim();
             if (searchTerm !== '') {
-                const searchUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(searchTerm)}`;
-                window.location.href = searchUrl;
+                searchVideos(searchTerm);
             }
         });
     </script>
