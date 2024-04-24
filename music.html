@@ -11,12 +11,20 @@
             padding: 0;
         }
 
-        .header {
-            background-color: #1DB954;
-            padding: 20px;
+        .container {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+        }
+
+        .sidebar {
+            flex: 1;
+            padding: 20px;
+            background-color: #1DB954;
+            color: white;
+        }
+
+        .main-content {
+            flex: 2;
+            padding: 20px;
         }
 
         .logo {
@@ -25,7 +33,7 @@
         }
 
         .search-container {
-            margin-left: 20px;
+            margin-top: 20px;
             display: flex;
             align-items: center;
         }
@@ -36,6 +44,7 @@
             border-radius: 20px;
             border: none;
             outline: none;
+            margin-right: 10px;
         }
 
         #searchButton {
@@ -52,34 +61,41 @@
             background-color: #1ed760;
         }
 
-        .container {
-            padding: 20px;
+        .video {
+            margin-bottom: 20px;
+        }
+
+        .thumbnail {
+            width: 100%;
+            height: auto;
+        }
+
+        .title {
+            margin-top: 10px;
+            font-size: 18px;
         }
 
         /* Add more styles as needed */
     </style>
 </head>
 <body>
-    <!-- Header with logo and search -->
-    <div class="header">
-        <img class="logo" src="logo.png" alt="Logo">
-        <div class="search-container">
-            <input type="text" id="searchInput" placeholder="Search for music...">
-            <button id="searchButton" onclick="search()">Search</button>
+    <div class="container">
+        <!-- Sidebar with logo and search -->
+        <div class="sidebar">
+            <img class="logo" src="logo.png" alt="Logo">
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search for music...">
+                <button id="searchButton" onclick="search()">Search</button>
+            </div>
+        </div>
+
+        <!-- Main content with trending music videos -->
+        <div class="main-content" id="trendingMusicVideos">
+            <!-- Trending music videos will be displayed here -->
         </div>
     </div>
 
-    <!-- Trending music videos section -->
-    <div class="container">
-        <h2>Trending Music Videos</h2>
-        <div id="trendingMusicVideos"></div>
-    </div>
-
-    <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TP48QBR5"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
-
+    <!-- JavaScript code for fetching trending music videos -->
     <script>
         // Function to fetch trending music videos
         function fetchTrendingMusicVideos() {
@@ -114,16 +130,12 @@
                         thumbnail.src = thumbnailUrl;
                         thumbnail.alt = videoTitle;
 
-                        const infoDiv = document.createElement('div');
-                        infoDiv.classList.add('info');
-
                         const title = document.createElement('div');
                         title.classList.add('title');
                         title.textContent = videoTitle;
 
-                        infoDiv.appendChild(title);
                         videoDiv.appendChild(thumbnail);
-                        videoDiv.appendChild(infoDiv);
+                        videoDiv.appendChild(title);
 
                         trendingMusicVideosContainer.appendChild(videoDiv);
                     });
