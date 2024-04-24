@@ -13,23 +13,8 @@
 
         .container {
             display: flex;
-        }
-
-        .sidebar {
-            flex: 1;
-            padding: 20px;
-            background-color: #1DB954;
-            color: white;
-        }
-
-        .main-content {
-            flex: 3;
-            padding: 20px;
-        }
-
-        .logo {
-            width: 50px;
-            height: 50px;
+            flex-direction: column;
+            align-items: center;
         }
 
         .search-container {
@@ -78,79 +63,96 @@
 </head>
 <body>
     <div class="container">
-        <!-- Sidebar with logo and search -->
-        <div class="sidebar">
-            <img class="logo" src="logo.png" alt="Logo">
-            <div class="search-container">
-                <input type="text" id="searchInput" placeholder="Search for music...">
-                <button id="searchButton">Search</button>
-            </div>
+        <!-- Search input and button -->
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Search for music...">
+            <button id="searchButton">Search</button>
         </div>
 
-        <!-- Main content with trending music videos -->
-        <div class="main-content" id="searchResults">
-            <!-- Search results will be displayed here -->
+        <!-- Videos container -->
+        <div id="videosContainer">
+            <!-- Trending music videos or search results will be displayed here -->
         </div>
     </div>
 
     <!-- JavaScript code for fetching trending music videos and handling search -->
     <script>
-        // Function to fetch search results
+        // Function to fetch trending music videos
+        function fetchTrendingMusicVideos() {
+            const apiKey = 'YOUR_YOUTUBE_API_KEY';
+            const apiUrl = `https://www.googleapis.com/youtube/v3/videos?key=${apiKey}&part=snippet&chart=mostPopular&regionCode=US&maxResults=10&videoCategoryId=10`;
+
+            fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                displayVideos(data.items);
+            })
+            .catch(error => {
+                console.error('Error fetching trending music videos:', error);
+                const videosContainer = document.getElementById('videosContainer');
+                videosContainer.textContent = 'An error occurred while fetching trending music videos.';
+            });
+        }
+
+        // Function to display videos
+        function displayVideos(videos) {
+            const videosContainer = document.getElementById('videosContainer');
+            videosContainer.innerHTML = ''; // Clear previous videos
+
+            if (!videos || videos.length === 0) {
+                videosContainer.textContent = 'No trending music videos found.';
+                return;
+            }
+
+            videos.forEach(video => {
+                const videoId = video.id;
+                const videoTitle = video.snippet.title;
+                const thumbnailUrl = video.snippet.thumbnails.medium.url;
+                const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
+
+                const videoDiv = document.createElement('div');
+                videoDiv.classList.add('video');
+                videoDiv.onclick = function() {
+                    window.location.href = `video.html?id=${videoId}`;
+                };
+
+                const thumbnail = document.createElement('img');
+                thumbnail.classList.add('thumbnail');
+                thumbnail.src = thumbnailUrl;
+                thumbnail.alt = videoTitle;
+
+                const title = document.createElement('div');
+                title.classList.add('title');
+                title.textContent = videoTitle;
+
+                videoDiv.appendChild(thumbnail);
+                videoDiv.appendChild(title);
+
+                videosContainer.appendChild(videoDiv);
+            });
+        }
+
+        // Function to search videos
         function searchVideos(searchTerm) {
             const apiKey = 'AIzaSyAAupl0BF00KNHLJHhztrW4mNWzCpmBOo0';
             const apiUrl = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&part=snippet&type=video&maxResults=10&q=${encodeURIComponent(searchTerm)}`;
 
             fetch(apiUrl)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Failed to fetch search results');
-                }
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
-                const searchResultsContainer = document.getElementById('searchResults');
-
-                if (data.items && data.items.length > 0) {
-                    searchResultsContainer.innerHTML = ''; // Clear previous search results
-
-                    data.items.forEach(item => {
-                        const videoId = item.id.videoId;
-                        const videoTitle = item.snippet.title;
-                        const thumbnailUrl = item.snippet.thumbnails.medium.url;
-                        const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
-
-                        const videoDiv = document.createElement('div');
-                        videoDiv.classList.add('video');
-                        videoDiv.onclick = function() {
-                            window.location.href = `video.html?id=${videoId}`;
-                        };
-
-                        const thumbnail = document.createElement('img');
-                        thumbnail.classList.add('thumbnail');
-                        thumbnail.src = thumbnailUrl;
-                        thumbnail.alt = videoTitle;
-
-                        const title = document.createElement('div');
-                        title.classList.add('title');
-                        title.textContent = videoTitle;
-
-                        videoDiv.appendChild(thumbnail);
-                        videoDiv.appendChild(title);
-
-                        searchResultsContainer.appendChild(videoDiv);
-                    });
-                } else {
-                    searchResultsContainer.textContent = 'No search results found.';
-                }
+                displayVideos(data.items);
             })
             .catch(error => {
                 console.error('Error fetching search results:', error);
-                const searchResultsContainer = document.getElementById('searchResults');
-                searchResultsContainer.textContent = 'An error occurred while fetching search results.';
+                const videosContainer = document.getElementById('videosContainer');
+                videosContainer.textContent = 'An error occurred while fetching search results.';
             });
         }
 
-        // Function to handle search button click
+        // Fetch trending music videos when the page loads
+        window.onload = fetchTrendingMusicVideos;
+
+        // Add event listener for search button click
         document.getElementById('searchButton').addEventListener('click', function() {
             const searchTerm = document.getElementById('searchInput').value.trim();
             if (searchTerm !== '') {
