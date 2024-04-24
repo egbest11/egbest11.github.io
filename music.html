@@ -16,7 +16,7 @@
         }
 
         .sidebar {
-            flex: 0.5;
+            flex: 1;
             padding: 20px;
             background-color: #1DB954;
             color: white;
@@ -33,14 +33,12 @@
         }
 
         .search-container {
-            margin-top: 20px;
-            display: flex;
-            align-items: center;
+            margin-bottom: 20px;
         }
 
         #searchInput {
             padding: 10px;
-            width: 300px;
+            width: calc(100% - 40px);
             border-radius: 20px;
             border: none;
             outline: none;
@@ -85,7 +83,7 @@
             <img class="logo" src="logo.png" alt="Logo">
             <div class="search-container">
                 <input type="text" id="searchInput" placeholder="Search for music...">
-                <button id="searchButton" onclick="search()">Search</button>
+                <button id="searchButton">Search</button>
             </div>
         </div>
 
@@ -95,7 +93,7 @@
         </div>
     </div>
 
-    <!-- JavaScript code for fetching trending music videos -->
+    <!-- JavaScript code for fetching trending music videos and handling search -->
     <script>
         // Function to fetch trending music videos
         function fetchTrendingMusicVideos() {
@@ -154,13 +152,13 @@
         window.onload = fetchTrendingMusicVideos;
 
         // Function to handle search button click
-        function search() {
+        document.getElementById('searchButton').addEventListener('click', function() {
             const searchTerm = document.getElementById('searchInput').value.trim();
             if (searchTerm !== '') {
                 const searchUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(searchTerm)}`;
                 window.location.href = searchUrl;
             }
-        }
+        });
     </script>
 </body>
 </html>
