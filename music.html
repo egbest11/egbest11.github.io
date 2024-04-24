@@ -4,69 +4,73 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trending Music Videos</title>
-   
-      <style>
+    <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
         }
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
+        
+        .header {
+            background-color: #1DB954;
             padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
             text-align: center;
         }
-        input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+
+        .logo {
+            width: 50px; /* Adjust size as needed */
+            height: 50px; /* Adjust size as needed */
         }
-        button {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        #results {
+
+        .search-container {
+            text-align: center;
             margin-top: 20px;
         }
-        .video {
-            margin-bottom: 20px;
-            cursor: pointer;
-        }
-        .video img {
-            width: 100%;
-            height: auto;
-        }
-        .video .info {
+
+        #searchInput {
             padding: 10px;
-            background-color: #f9f9f9;
-            border-radius: 5px;
+            width: 300px;
+            border-radius: 20px;
+            border: none;
+            outline: none;
         }
-        .video .title {
-            font-weight: bold;
+
+        #searchButton {
+            padding: 10px 20px;
+            background-color: #1DB954;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            outline: none;
         }
+
+        #searchButton:hover {
+            background-color: #1ed760;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        /* Add more styles as needed */
     </style>
- 
 </head>
 <body>
-    <!-- HTML content -->
+    <!-- Header with logo -->
+    <div class="header">
+        <img class="logo" src="logo.png" alt="Logo">
+    </div>
+
+    <!-- Search container -->
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Search for music...">
+        <button id="searchButton" onclick="search()">Search</button>
+    </div>
+
+    <!-- Trending music videos section -->
     <div class="container">
-        <h1>Trending Music Videos</h1>
+        <h2>Trending Music Videos</h2>
         <div id="trendingMusicVideos"></div>
     </div>
 
@@ -78,7 +82,7 @@
     <script>
         // Function to fetch trending music videos
         function fetchTrendingMusicVideos() {
-            const apiKey = 'AIzaSyAAupl0BF00KNHLJHhztrW4mNWzCpmBOo0';
+            const apiKey = 'YOUR_YOUTUBE_API_KEY';
             const apiUrl = `https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&regionCode=US&maxResults=10&videoCategoryId=10&key=${apiKey}`;
 
             fetch(apiUrl)
@@ -135,6 +139,12 @@
 
         // Call the fetchTrendingMusicVideos function when the page loads
         window.onload = fetchTrendingMusicVideos;
+
+        // Function to handle search button click
+        function search() {
+            const searchTerm = document.getElementById('searchInput').value;
+            // Implement search functionality here
+        }
     </script>
 </body>
 </html>
