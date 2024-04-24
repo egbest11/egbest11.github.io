@@ -13,24 +13,22 @@
 
         .container {
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            align-items: flex-start;
+            justify-content: space-between;
+            padding: 20px;
         }
 
         .search-container {
-            width: 100%;
-            display: flex;
-            justify-content: flex-start;
-            margin-bottom: 20px;
+            width: 30%;
         }
 
         #searchInput {
             padding: 10px;
-            width: calc(100% - 120px);
+            width: calc(100% - 20px);
             border-radius: 20px;
             border: none;
             outline: none;
-            margin-right: 10px;
+            margin-bottom: 10px;
         }
 
         #searchButton {
@@ -41,6 +39,7 @@
             border-radius: 20px;
             cursor: pointer;
             outline: none;
+            width: calc(100% - 20px);
         }
 
         #searchButton:hover {
@@ -48,11 +47,14 @@
         }
 
         #videosContainer {
-            width: 100%;
+            width: 65%;
         }
 
         .video {
             margin-bottom: 20px;
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 10px;
         }
 
         .thumbnail {
@@ -64,8 +66,6 @@
             margin-top: 10px;
             font-size: 18px;
         }
-
-        /* Add more styles as needed */
     </style>
 </head>
 <body>
@@ -86,7 +86,7 @@
     <script>
         // Function to fetch trending music videos
         function fetchTrendingMusicVideos() {
-            const apiKey = 'AIzaSyAAupl0BF00KNHLJHhztrW4mNWzCpmBOo0'; // Replace 'YOUR_YOUTUBE_API_KEY' with your actual YouTube Data API key
+            const apiKey = 'AIzaSyAAupl0BF00KNHLJHhztrW4mNWzCpmBOo0Y'; // Replace 'YOUR_YOUTUBE_API_KEY' with your actual YouTube Data API key
             const apiUrl = `https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&regionCode=US&maxResults=10&videoCategoryId=10&key=${apiKey}`;
 
             fetch(apiUrl)
