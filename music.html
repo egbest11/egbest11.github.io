@@ -10,21 +10,24 @@
             margin: 0;
             padding: 0;
         }
-        
+
         .header {
             background-color: #1DB954;
             padding: 20px;
-            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .logo {
-            width: 50px; /* Adjust size as needed */
-            height: 50px; /* Adjust size as needed */
+            width: 50px;
+            height: 50px;
         }
 
         .search-container {
-            text-align: center;
-            margin-top: 20px;
+            margin-left: 20px;
+            display: flex;
+            align-items: center;
         }
 
         #searchInput {
@@ -57,15 +60,13 @@
     </style>
 </head>
 <body>
-    <!-- Header with logo -->
+    <!-- Header with logo and search -->
     <div class="header">
         <img class="logo" src="logo.png" alt="Logo">
-    </div>
-
-    <!-- Search container -->
-    <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Search for music...">
-        <button id="searchButton" onclick="search()">Search</button>
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Search for music...">
+            <button id="searchButton" onclick="search()">Search</button>
+        </div>
     </div>
 
     <!-- Trending music videos section -->
@@ -142,8 +143,11 @@
 
         // Function to handle search button click
         function search() {
-            const searchTerm = document.getElementById('searchInput').value;
-            // Implement search functionality here
+            const searchTerm = document.getElementById('searchInput').value.trim();
+            if (searchTerm !== '') {
+                const searchUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(searchTerm)}`;
+                window.location.href = searchUrl;
+            }
         }
     </script>
 </body>
