@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trending Music Videos</title>
+    <style>
+        /* CSS styles */
+    </style>
+</head>
+<body>
+    <!-- HTML content -->
+    <div class="container">
+        <h1>Trending Music Videos</h1>
+        <div id="trendingMusicVideos"></div>
+    </div>
+
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TP48QBR5"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <script>
+        // Function to fetch trending music videos
+        function fetchTrendingMusicVideos() {
+            const apiKey = 'AIzaSyAAupl0BF00KNHLJHhztrW4mNWzCpmBOo0';
+            const apiUrl = `https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&regionCode=US&maxResults=10&videoCategoryId=10&key=${apiKey}`;
+
+            fetch(apiUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to fetch trending music videos');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const trendingMusicVideosContainer = document.getElementById('trendingMusicVideos');
+
+                if (data.items && data.items.length > 0) {
+                    data.items.forEach(item => {
+                        const videoId = item.id;
+                        const videoTitle = item.snippet.title;
+                        const thumbnailUrl = item.snippet.thumbnails.medium.url;
+                        const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
+
+                        const videoDiv = document.createElement('div');
+                        videoDiv.classList.add('video');
+                        videoDiv.onclick = function() {
+                            window.location.href = `video.html?id=${videoId}`;
+                        };
+
+                        const thumbnail = document.createElement('img');
+                        thumbnail.classList.add('thumbnail');
+                        thumbnail.src = thumbnailUrl;
+                        thumbnail.alt = videoTitle;
+
+                        const infoDiv = document.createElement('div');
+                        infoDiv.classList.add('info');
+
+                        const title = document.createElement('div');
+                        title.classList.add('title');
+                        title.textContent = videoTitle;
+
+                        infoDiv.appendChild(title);
+                        videoDiv.appendChild(thumbnail);
+                        videoDiv.appendChild(infoDiv);
+
+                        trendingMusicVideosContainer.appendChild(videoDiv);
+                    });
+                } else {
+                    trendingMusicVideosContainer.textContent = 'No trending music videos found.';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching trending music videos:', error);
+                const trendingMusicVideosContainer = document.getElementById('trendingMusicVideos');
+                trendingMusicVideosContainer.textContent = 'An error occurred while fetching trending music videos.';
+            });
+        }
+
+        // Call the fetchTrendingMusicVideos function when the page loads
+        window.onload = fetchTrendingMusicVideos;
+    </script>
+</body>
+</html>
