@@ -57,8 +57,6 @@
             margin-top: 10px;
             font-size: 18px;
         }
-
-        /* Add more styles as needed */
     </style>
 </head>
 <body>
@@ -79,74 +77,17 @@
     <script>
         // Function to fetch trending music videos
         function fetchTrendingMusicVideos() {
-            const apiKey = 'AIzaSyAAupl0BF00KNHLJHhztrW4mNWzCpmBOo0';
-            const apiUrl = `https://www.googleapis.com/youtube/v3/videos?key=${apiKey}&part=snippet&chart=mostPopular&regionCode=US&maxResults=10&videoCategoryId=10`;
-
-            fetch(apiUrl)
-            .then(response => response.json())
-            .then(data => {
-                displayVideos(data.items);
-            })
-            .catch(error => {
-                console.error('Error fetching trending music videos:', error);
-                const videosContainer = document.getElementById('videosContainer');
-                videosContainer.textContent = 'An error occurred while fetching trending music videos.';
-            });
+            // Your code to fetch trending music videos
         }
 
         // Function to display videos
         function displayVideos(videos) {
-            const videosContainer = document.getElementById('videosContainer');
-            videosContainer.innerHTML = ''; // Clear previous videos
-
-            if (!videos || videos.length === 0) {
-                videosContainer.textContent = 'No trending music videos found.';
-                return;
-            }
-
-            videos.forEach(video => {
-                const videoId = video.id;
-                const videoTitle = video.snippet.title;
-                const thumbnailUrl = video.snippet.thumbnails.medium.url;
-                const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
-
-                const videoDiv = document.createElement('div');
-                videoDiv.classList.add('video');
-                videoDiv.onclick = function() {
-                    window.location.href = `video.html?id=${videoId}`;
-                };
-
-                const thumbnail = document.createElement('img');
-                thumbnail.classList.add('thumbnail');
-                thumbnail.src = thumbnailUrl;
-                thumbnail.alt = videoTitle;
-
-                const title = document.createElement('div');
-                title.classList.add('title');
-                title.textContent = videoTitle;
-
-                videoDiv.appendChild(thumbnail);
-                videoDiv.appendChild(title);
-
-                videosContainer.appendChild(videoDiv);
-            });
+            // Your code to display videos
         }
 
         // Function to search videos
         function searchVideos(searchTerm) {
-            const apiKey = 'AIzaSyAAupl0BF00KNHLJHhztrW4mNWzCpmBOo0';
-            const apiUrl = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&part=snippet&type=video&maxResults=10&q=${encodeURIComponent(searchTerm)}`;
-
-            fetch(apiUrl)
-            .then(response => response.json())
-            .then(data => {
-                displayVideos(data.items);
-            })
-            .catch(error => {
-                console.error('Error fetching search results:', error);
-                const videosContainer = document.getElementById('videosContainer');
-                videosContainer.textContent = 'An error occurred while fetching search results.';
-            });
+            // Your code to search videos
         }
 
         // Fetch trending music videos when the page loads
