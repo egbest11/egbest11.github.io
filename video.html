@@ -79,6 +79,7 @@
 
     <script>
         let player;
+        let isSeeking = false;
 
         function onYouTubeIframeAPIReady() {
             const videoId = getVideoIdFromUrl();
@@ -97,12 +98,26 @@
                 },
                 events: {
                     'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
                 }
             });
         }
 
         function onPlayerReady(event) {
             // Do something when player is ready
+        }
+
+        function onPlayerStateChange(event) {
+            if (event.data == YT.PlayerState.PLAYING) {
+                // Update the slider position while video is playing
+                setInterval(updateSlider, 1000);
+            }
+        }
+
+        function updateSlider() {
+            if (!isSeeking) {
+                document.getElementById('seekBar').value = player.getCurrentTime();
+            }
         }
 
         function getVideoIdFromUrl() {
@@ -119,7 +134,11 @@
         }
 
         function seekTo(seconds) {
+            isSeeking = true;
             player.seekTo(seconds, true);
+            setTimeout(() => {
+                isSeeking = false;
+            }, 100);
         }
     </script>
     <script src="https://www.youtube.com/iframe_api"></script>
