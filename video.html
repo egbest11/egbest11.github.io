@@ -39,26 +39,18 @@
             return urlParams.get('id');
         }
 
-        // Function to fetch lyrics based on artist and song title
-        function fetchLyrics(artist, title) {
-            const apiUrl = `https://api.lyrics.ovh/v1/${encodeURIComponent(artist)}/${encodeURIComponent(title)}`;
+        // Function to fetch lyrics based on artist and song title from LyricsFandom API
+        async function fetchLyrics(artist, title) {
+            const apiUrl = `https://lyricsfandom.com/api/artist/${encodeURIComponent(artist)}/song/${encodeURIComponent(title)}`;
 
-            fetch(apiUrl)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Lyrics not found');
-                }
-                return response.json();
-            })
-            .then(data => {
-                const lyricsContainer = document.getElementById('lyrics');
-                lyricsContainer.textContent = data.lyrics;
-            })
-            .catch(error => {
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+                return data.lyrics;
+            } catch (error) {
                 console.error('Error fetching lyrics:', error);
-                const lyricsContainer = document.getElementById('lyrics');
-                lyricsContainer.textContent = 'Lyrics not available.';
-            });
+                return 'Lyrics not available.';
+            }
         }
 
         // Function to embed the YouTube video using an iframe
@@ -74,24 +66,24 @@
         }
 
         // Main function to initialize the page
-        function initializePage() {
+        async function initializePage() {
             const videoId = getVideoIdFromUrl();
             embedYouTubeVideo(videoId);
 
-            // Fetch video title and use it to fetch lyrics
-            fetch(`https://www.googleapis.com/youtube/v3/videos?id=${videoId}&part=snippet&key=AIzaSyAAupl0BF00KNHLJHhztrW4mNWzCpmBOo0`)
-            .then(response => response.json())
-            .then(data => {
-                const videoTitle = data.items[0].snippet.title;
-                // For simplicity, let's assume the artist name is the same as the channel title
-                const artist = data.items[0].snippet.channelTitle;
-                fetchLyrics(artist, videoTitle);
-            })
-            .catch(error => {
-                console.error('Error fetching video details:', error);
-                const lyricsContainer = document.getElementById('lyrics');
-                lyricsContainer.textContent = 'Lyrics not available.';
-            });
+            // Fetch video title
+            const videoTitleResponse = await fetch(`https://www.googleapis.com/youtube/v3/videos?id=${videoId}&part=snippet&key=YOUR_YOUTUBE_API_KEY`);
+            const videoTitleData = await videoTitleResponse.json();
+            const videoTitle = videoTitleData.items[0].snippet.title;
+            
+            // For simplicity, let's assume the artist name is the same as the channel title
+            const artist = videoTitleData.items[0].snippet.channelTitle;
+            
+            // Fetch lyrics
+            const lyrics = await fetchLyrics(artist, videoTitle);
+
+            // Display lyrics
+            const lyricsContainer = document.getElementById('lyrics');
+            lyricsContainer.textContent = lyrics;
         }
 
         // Call the initializePage function when the page loads
