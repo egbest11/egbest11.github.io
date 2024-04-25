@@ -130,7 +130,7 @@
 
             videos.forEach(video => {
                 const videoCard = document.createElement('a');
-                videoCard.href = `video.html?id=${video.id}`;
+                videoCard.href = `video.html?id=${video.id.videoId}`;
                 videoCard.classList.add('video-card');
 
                 const thumbnail = document.createElement('img');
