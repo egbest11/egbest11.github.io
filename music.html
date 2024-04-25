@@ -51,6 +51,9 @@
             padding: 10px;
             border-radius: 10px;
             box-sizing: border-box;
+            cursor: pointer;
+            text-decoration: none; /* Ensure no default underline */
+            color: inherit; /* Inherit text color from parent */
         }
 
         .thumbnail {
@@ -108,7 +111,8 @@
             videosContainer.innerHTML = '';
 
             videos.forEach(video => {
-                const videoCard = document.createElement('div');
+                const videoCard = document.createElement('a');
+                videoCard.href = `video.html?id=${video.id}`;
                 videoCard.classList.add('video-card');
 
                 const thumbnail = document.createElement('img');
