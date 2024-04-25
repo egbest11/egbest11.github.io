@@ -22,6 +22,15 @@
                 height: '315',
                 width: '560',
                 videoId: videoId,
+                playerVars: {
+                    controls: 0,
+                    modestbranding: 1,
+                    disablekb: 1,
+                    enablejsapi: 1,
+                    iv_load_policy: 3,
+                    loop: 0,
+                    rel: 0
+                },
                 events: {
                     'onReady': onPlayerReady,
                 }
