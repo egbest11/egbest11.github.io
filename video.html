@@ -3,91 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Embedded Video with Lyrics</title>
+    <title>Embedded Video with Controls</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
             background-color: #f0f0f0;
         }
 
-        #player {
-            margin: 20px auto;
-            width: 560px;
-            height: 315px;
+        #video-container {
+            text-align: center;
         }
 
-        #lyrics {
-            margin: 20px auto;
-            width: 560px;
-            background-color: #ffffff;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        #player {
+            border: 2px solid #333;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        #controls {
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 0;
+            border: none;
+            cursor: pointer;
+            background-color: transparent;
+        }
+
+        svg {
+            width: 50px;
+            height: 50px;
+            fill: #007bff;
+            transition: transform 0.2s ease;
+        }
+
+        svg:hover {
+            transform: scale(1.1);
+        }
+
+        #pause-icon {
+            display: none;
         }
     </style>
 </head>
 <body>
-    <div id="player"></div>
-    <div id="lyrics"></div>
+    <div id="video-container">
+        <div id="player"></div>
+        <div id="controls">
+            <button id="playPauseButton" onclick="togglePlayPause()">
+                <svg id="play-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z"/>
+                </svg>
+                <svg id="pause-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                </svg>
+            </button>
+        </div>
+    </div>
 
     <script>
-        // Function to extract the video ID from the URL
+        let player;
+
+        function onYouTubeIframeAPIReady() {
+            const videoId = getVideoIdFromUrl();
+            player = new YT.Player('player', {
+                height: '315',
+                width: '560',
+                videoId: videoId,
+                playerVars: {
+                    controls: 0,
+                    modestbranding: 1,
+                    disablekb: 1,
+                    enablejsapi: 1,
+                    iv_load_policy: 3,
+                    loop: 0,
+                    rel: 0
+                },
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            // Do something when player is ready
+        }
+
+        function onPlayerStateChange(event) {
+            // Do something when player state changes
+        }
+
+        function togglePlayPause() {
+            if (player.getPlayerState() == YT.PlayerState.PLAYING) {
+                player.pauseVideo();
+                document.getElementById('play-icon').style.display = 'inline';
+                document.getElementById('pause-icon').style.display = 'none';
+            } else {
+                player.playVideo();
+                document.getElementById('play-icon').style.display = 'none';
+                document.getElementById('pause-icon').style.display = 'inline';
+            }
+        }
+
         function getVideoIdFromUrl() {
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get('id');
         }
-
-        // Function to fetch lyrics based on artist and song title from LyricsFandom API
-        async function fetchLyrics(artist, title) {
-            const apiUrl = `https://lyricsfandom.com/api/artist/${encodeURIComponent(artist)}/song/${encodeURIComponent(title)}`;
-
-            try {
-                const response = await fetch(apiUrl);
-                const data = await response.json();
-                return data.lyrics;
-            } catch (error) {
-                console.error('Error fetching lyrics:', error);
-                return 'Lyrics not available.';
-            }
-        }
-
-        // Function to embed the YouTube video using an iframe
-        function embedYouTubeVideo(videoId) {
-            const playerDiv = document.getElementById('player');
-            const playerFrame = document.createElement('iframe');
-            playerFrame.setAttribute('width', '560');
-            playerFrame.setAttribute('height', '315');
-            playerFrame.setAttribute('src', `https://www.youtube.com/embed/${videoId}`);
-            playerFrame.setAttribute('frameborder', '0');
-            playerFrame.setAttribute('allowfullscreen', '');
-            playerDiv.appendChild(playerFrame);
-        }
-
-        // Main function to initialize the page
-        async function initializePage() {
-            const videoId = getVideoIdFromUrl();
-            embedYouTubeVideo(videoId);
-
-            // Fetch video title
-            const videoTitleResponse = await fetch(`https://www.googleapis.com/youtube/v3/videos?id=${videoId}&part=snippet&key=YOUR_YOUTUBE_API_KEY`);
-            const videoTitleData = await videoTitleResponse.json();
-            const videoTitle = videoTitleData.items[0].snippet.title;
-            
-            // For simplicity, let's assume the artist name is the same as the channel title
-            const artist = videoTitleData.items[0].snippet.channelTitle;
-            
-            // Fetch lyrics
-            const lyrics = await fetchLyrics(artist, videoTitle);
-
-            // Display lyrics
-            const lyricsContainer = document.getElementById('lyrics');
-            lyricsContainer.textContent = lyrics;
-        }
-
-        // Call the initializePage function when the page loads
-        window.onload = initializePage;
     </script>
+    <script src="https://www.youtube.com/iframe_api"></script>
 </body>
 </html>
