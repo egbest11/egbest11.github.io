@@ -28,13 +28,30 @@
         }
 
         .search {
-            width: 100%;
+            width: calc(100% - 40px);
             margin-bottom: 20px;
             padding: 10px;
             box-sizing: border-box;
             border: 1px solid #ccc;
             border-radius: 5px;
             font-size: 16px;
+        }
+
+        .search-button {
+            width: 40px;
+            margin-left: 10px;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .search-button:hover {
+            background-color: #0056b3;
         }
 
         .videos-container {
@@ -74,7 +91,8 @@
         <!-- Sidebar with search and logo -->
         <div class="sidebar">
             <img class="logo" src="spotify-logo.png" alt="Spotify Logo">
-            <input type="text" class="search" placeholder="Search">
+            <input type="text" class="search" placeholder="Search" id="searchInput">
+            <button class="search-button" onclick="search()">Search</button>
             <!-- You can add additional elements here -->
         </div>
 
@@ -84,11 +102,11 @@
         </div>
     </div>
 
-    <!-- JavaScript code for fetching trending music videos -->
+    <!-- JavaScript code for fetching trending music videos and handling search -->
     <script>
         // Function to fetch trending music videos
         function fetchTrendingMusicVideos() {
-            const apiKey = 'AIzaSyAAupl0BF00KNHLJHhztrW4mNWzCpmBOo0'; // Replace 'YOUR_YOUTUBE_API_KEY' with your actual YouTube Data API key
+            const apiKey = 'YOUR_YOUTUBE_API_KEY'; // Replace 'YOUR_YOUTUBE_API_KEY' with your actual YouTube Data API key
             const apiUrl = `https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&regionCode=US&maxResults=20&videoCategoryId=10&key=${apiKey}`;
 
             fetch(apiUrl)
@@ -128,6 +146,26 @@
                 videoCard.appendChild(title);
 
                 videosContainer.appendChild(videoCard);
+            });
+        }
+
+        // Function to handle search
+        function search() {
+            const searchTerm = document.getElementById('searchInput').value;
+            const apiKey = 'AIzaSyAAupl0BF00KNHLJHhztrW4mNWzCpmBOo0'; // Replace 'YOUR_YOUTUBE_API_KEY' with your actual YouTube Data API key
+            const apiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=20&q=${encodeURIComponent(searchTerm)}&key=${apiKey}`;
+
+            fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.items) {
+                    displayVideos(data.items);
+                } else {
+                    console.error('Error fetching search results: Response data or items are undefined.');
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching search results:', error);
             });
         }
 
