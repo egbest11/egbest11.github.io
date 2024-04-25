@@ -12,13 +12,36 @@
         }
 
         .container {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .sidebar {
+            flex: 0 0 30%;
+            background-color: #f9f9f9;
             padding: 20px;
         }
 
+        .logo {
+            width: 100px; /* Adjust the width as needed */
+            margin-bottom: 20px;
+        }
+
+        .search {
+            width: 100%;
+            margin-bottom: 20px;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
         .videos-container {
+            flex: 1;
             display: flex;
             flex-wrap: wrap;
-            justify-content: space-between;
+            padding: 20px;
         }
 
         .video-card {
@@ -45,6 +68,13 @@
 </head>
 <body>
     <div class="container">
+        <!-- Sidebar with search and logo -->
+        <div class="sidebar">
+            <img class="logo" src="spotify-logo.png" alt="Spotify Logo">
+            <input type="text" class="search" placeholder="Search">
+            <!-- You can add additional elements here -->
+        </div>
+
         <!-- Videos container -->
         <div class="videos-container" id="videosContainer">
             <!-- Trending music videos or search results will be displayed here -->
