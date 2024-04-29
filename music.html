@@ -4,173 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trending Music Videos</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-
-        .container {
-            display: flex;
-            flex-direction: row;
-        }
-
-        .sidebar {
-            flex: 0 0 30%;
-            background-color: #f9f9f9;
-            padding: 20px;
-        }
-
-        .logo {
-            width: 100px; /* Adjust the width as needed */
-            margin-bottom: 20px;
-        }
-
-        .search {
-            width: calc(100% - 40px);
-            margin-bottom: 20px;
-            padding: 10px;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-
-        .search-button {
-            width: 40px;
-            margin-left: 10px;
-            padding: 10px;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #007bff;
-            color: #fff;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        .search-button:hover {
-            background-color: #0056b3;
-        }
-
-        .videos-container {
-            flex: 1;
-            display: flex;
-            flex-wrap: wrap;
-            padding: 20px;
-        }
-
-        .video-card {
-            width: calc(25% - 20px);
-            margin-bottom: 20px;
-            background-color: #f9f9f9;
-            padding: 10px;
-            border-radius: 10px;
-            box-sizing: border-box;
-            cursor: pointer;
-            text-decoration: none; /* Ensure no default underline */
-            color: inherit; /* Inherit text color from parent */
-        }
-
-        .thumbnail {
-            width: 100%;
-            height: auto;
-            border-radius: 5px;
-        }
-
-        .title {
-            margin-top: 10px;
-            font-size: 14px;
-            text-align: center;
-        }
-    </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Sidebar with search and logo -->
-        <div class="sidebar">
-            <img class="logo" src="spotify-logo.png" alt="Spotify Logo">
-            <input type="text" class="search" placeholder="Search" id="searchInput">
-            <button class="search-button" onclick="search()">Search</button>
-            <!-- You can add additional elements here -->
-        </div>
+    <button id="watchVideosButton">Watch Music Videos</button>
 
-        <!-- Videos container -->
-        <div class="videos-container" id="videosContainer">
-            <!-- Trending music videos or search results will be displayed here -->
-        </div>
-    </div>
-
-    <!-- JavaScript code for fetching trending music videos and handling search -->
     <script>
-        // Function to fetch trending music videos
-        function fetchTrendingMusicVideos() {
-            const apiKey = 'AIzaSyAAupl0BF00KNHLJHhztrW4mNWzCpmBOo0'; // Replace 'YOUR_YOUTUBE_API_KEY' with your actual YouTube Data API key
-            const apiUrl = `https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&regionCode=US&maxResults=20&videoCategoryId=10&key=${apiKey}`;
-
-            fetch(apiUrl)
-            .then(response => response.json())
-            .then(data => {
-                if (data && data.items) {
-                    displayVideos(data.items);
-                } else {
-                    console.error('Error fetching trending music videos: Response data or items are undefined.');
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching trending music videos:', error);
-            });
+        // Function to redirect to the music page
+        function redirectToMusicPage() {
+            window.location.href = 'music.html';
         }
 
-        // Function to display videos
-        function displayVideos(videos) {
-            const videosContainer = document.getElementById('videosContainer');
-            videosContainer.innerHTML = '';
-
-            videos.forEach(video => {
-                const videoCard = document.createElement('a');
-                videoCard.href = `video.html?id=${video.id.videoId}`;
-                videoCard.classList.add('video-card');
-
-                const thumbnail = document.createElement('img');
-                thumbnail.classList.add('thumbnail');
-                thumbnail.src = video.snippet.thumbnails.medium.url;
-                thumbnail.alt = video.snippet.title;
-
-                const title = document.createElement('div');
-                title.classList.add('title');
-                title.textContent = video.snippet.title;
-
-                videoCard.appendChild(thumbnail);
-                videoCard.appendChild(title);
-
-                videosContainer.appendChild(videoCard);
-            });
-        }
-
-        // Function to handle search
-        function search() {
-            const searchTerm = document.getElementById('searchInput').value;
-            const apiKey = 'AIzaSyAAupl0BF00KNHLJHhztrW4mNWzCpmBOo0'; // Replace 'YOUR_YOUTUBE_API_KEY' with your actual YouTube Data API key
-            const apiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=20&q=${encodeURIComponent(searchTerm)}&key=${apiKey}`;
-
-            fetch(apiUrl)
-            .then(response => response.json())
-            .then(data => {
-                if (data && data.items) {
-                    displayVideos(data.items);
-                } else {
-                    console.error('Error fetching search results: Response data or items are undefined.');
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching search results:', error);
-            });
-        }
-
-        // Fetch trending music videos when the page loads
-        window.onload = fetchTrendingMusicVideos;
+        // Event listener for the button click
+        document.getElementById('watchVideosButton').addEventListener('click', redirectToMusicPage);
     </script>
 </body>
 </html>
