@@ -1,108 +1,208 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Stopwatch with Fish Counter</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-  <script type="importmap">
-    {
-      "imports": {
-        "@material/web/": "https://esm.run/@material/web/"
-      }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stopwatch with Fish Counter</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100vh;
     }
-  </script>
-  <script type="module">
-    import '@material/web/all.js';
-  </script>
+    #header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+    }
+    #saveButton {
+        font-size: 1em;
+        padding: 10px 20px;
+        cursor: pointer;
+        border: none;
+        border-radius: 5px;
+        background-color: #007bff;
+        color: #fff;
+        transition: background-color 0.3s;
+    }
+    #saveButton:hover {
+        background-color: #0056b3;
+    }
+    #saveButton:active {
+        background-color: #004080;
+    }
+    #saveButton:focus {
+        outline: none;
+    }
+    #currentTime {
+        font-size: 2em;
+        margin-top: 30px;
+    }
+    #display {
+        font-size: 4em;
+        margin: auto;
+    }
+    #fishCounter {
+        font-size: 2em;
+        margin-top: 30px;
+    }
+    #fishControls {
+        margin-bottom: 30px;
+    }
+    .button {
+        font-size: 1em;
+        padding: 15px 30px;
+        margin: 0 20px;
+        cursor: pointer;
+        border: none;
+        border-radius: 8px;
+        background-color: #007bff;
+        color: #fff;
+        transition: background-color 0.3s;
+    }
+    .button:hover {
+        background-color: #0056b3;
+    }
+    .button:active {
+        background-color: #004080;
+    }
+    .button:focus {
+        outline: none;
+    }
+</style>
 </head>
 <body>
 
-<div class="mdc-typography">
-  <h1 class="mdc-typography--headline3">Stopwatch with Fish Counter</h1>
+<div id="header">
+    <button id="saveButton" onclick="saveData()">Save Data</button>
+    <div id="currentTime">Current Time: </div>
 </div>
 
-<div class="mdc-typography">
-  <h2 class="mdc-typography--headline5">Current Time: <span id="currentTime">00:00:00.000</span></h2>
+<div id="display">00:00:00.000</div>
+<button id="startStop" onclick="startStop()" class="button">Start</button>
+<button id="reset" onclick="reset()" class="button">Reset</button>
+
+<div id="fishCounter">Fish Caught: 0</div>
+<div id="fishControls">
+    <button id="addFish" onclick="catchFish()" class="button">+ Catch Fish</button>
+    <button id="removeFish" onclick="releaseFish()" class="button">- Release Fish</button>
 </div>
 
-<div class="mdc-typography">
-  <h2 class="mdc-typography--headline5">Fish Caught: <span id="fishCounter">0</span></h2>
-</div>
-
-<div class="mdc-typography">
-  <div class="mdc-form-field">
-    <div class="mdc-checkbox">
-      <input type="checkbox"
-             class="mdc-checkbox__native-control"
-             id="addFishCheckbox"
-             onclick="catchFish()">
-      <div class="mdc-checkbox__background">
-        <svg class="mdc-checkbox__checkmark"
-             viewBox="0 0 24 24">
-          <path class="mdc-checkbox__checkmark-path"
-                fill="none"
-                stroke="white"
-                d="M1.73,12.91 8.1,19.28 22.79,4.59"></path>
-        </svg>
-        <div class="mdc-checkbox__mixedmark"></div>
-      </div>
-      <div class="mdc-checkbox__ripple"></div>
-    </div>
-    <label for="addFishCheckbox">Catch Fish</label>
-  </div>
-</div>
-
-<div class="mdc-typography">
-  <button class="mdc-button mdc-button--outlined"
-          onclick="reset()">Reset</button>
+<div id="userData">
+    <input type="text" id="comment" placeholder="Add a comment">
+    <input type="date" id="date">
+    <button id="saveData" onclick="saveData()" class="button">Save Data</button>
 </div>
 
 <script>
-  var timer; // Variable to hold the setInterval() function
-  var hours = 0;
-  var minutes = 0;
-  var seconds = 0;
-  var milliseconds = 0;
-  var fishCount = 0;
-
-  // Function to update current time
-  function updateCurrentTime() {
-    var now = new Date();
-    var currentTimeString = now.toLocaleTimeString('en-US', { hour12: false });
-    document.getElementById('currentTime').textContent = currentTimeString;
-  }
-
-  // Update current time every second
-  setInterval(updateCurrentTime, 1000);
-
-  // Increment the fish count
-  function catchFish() {
-    if (document.getElementById('addFishCheckbox').checked) {
-      fishCount++;
-    } else {
-      fishCount--;
+    // Function to update current time
+    function updateCurrentTime() {
+        var now = new Date();
+        var currentTimeString = now.toLocaleString();
+        document.getElementById('currentTime').textContent = "Current Time: " + currentTimeString;
     }
-    updateFishCounter();
-  }
 
-  // Update fish counter text
-  function updateFishCounter() {
-    document.getElementById("fishCounter").textContent = fishCount;
-  }
+    // Update current time every second
+    setInterval(updateCurrentTime, 1000);
+    
+    // Remaining code remains the same...
+    
+    var timer; // Variable to hold the setInterval() function
+    var hours = 0;
+    var minutes = 0;
+    var seconds = 0;
+    var milliseconds = 0;
+    var fishCount = 0;
 
-  // Reset the timer and fish counter
-  function reset() {
-    clearInterval(timer); // Stop the timer
-    timer = null;
-    hours = 0;
-    minutes = 0;
-    seconds = 0;
-    milliseconds = 0;
-    fishCount = 0;
-    updateFishCounter();
-  }
+    function startStop() {
+        if (!timer) {
+            timer = setInterval(updateDisplay, 10); // Update display every 10 milliseconds
+            document.getElementById("startStop").innerHTML = "Stop";
+        } else {
+            clearInterval(timer); // Stop the timer
+            timer = null;
+            document.getElementById("startStop").innerHTML = "Start";
+        }
+    }
+
+    function updateDisplay() {
+        milliseconds++;
+        if (milliseconds >= 100) {
+            milliseconds = 0;
+            seconds++;
+            if (seconds >= 60) {
+                seconds = 0;
+                minutes++;
+                if (minutes >= 60) {
+                    minutes = 0;
+                    hours++;
+                }
+            }
+        }
+
+        var displayHours = hours < 10 ? "0" + hours : hours;
+        var displayMinutes = minutes < 10 ? "0" + minutes : minutes;
+        var displaySeconds = seconds < 10 ? "0" + seconds : seconds;
+        var displayMilliseconds = milliseconds < 10 ? "00" + milliseconds : milliseconds < 100 ? "0" + milliseconds : milliseconds;
+
+        document.getElementById("display").textContent = displayHours + ":" + displayMinutes + ":" + displaySeconds + "." + displayMilliseconds;
+    }
+
+    function reset() {
+        clearInterval(timer); // Stop the timer
+        timer = null;
+        hours = 0;
+        minutes = 0;
+        seconds = 0;
+        milliseconds = 0;
+        fishCount = 0;
+        document.getElementById("display").textContent = "00:00:00.000";
+        updateFishCounter();
+        document.getElementById("startStop").innerHTML = "Start";
+    }
+
+    function updateFishCounter() {
+        document.getElementById("fishCounter").textContent = "Fish Caught: " + fishCount;
+    }
+
+    // Increment the fish count
+    function catchFish() {
+        fishCount++;
+        updateFishCounter();
+    }
+
+    // Decrement the fish count
+    function releaseFish() {
+        if (fishCount > 0) {
+            fishCount--;
+            updateFishCounter();
+        }
+    }
+
+    // Save data to a text file
+    function saveData() {
+        var comment = document.getElementById("comment").value;
+        var date = document.getElementById("date").value;
+        var data = "Fish Caught: " + fishCount + "\nTime Elapsed: " + hours + " hours, " + minutes + " minutes, " + seconds + " seconds, " + milliseconds + " milliseconds";
+        if (comment !== "") {
+            data += "\nComment: " + comment;
+        }
+        if (date !== "") {
+            data += "\nDate: " + date;
+        }
+        // Adding start and end time
+        var startTime = new Date(Date.now() - (hours * 3600000) - (minutes * 60000) - (seconds * 1000) - milliseconds);
+        var endTime = new Date();
+        data += "\nStart Time: " + startTime.toLocaleString() + "\nEnd Time: " + endTime.toLocaleString();
+        var blob = new Blob([data], { type: "text/plain;charset=utf-8" });
+        saveAs(blob, "fish_data.txt");
+    }
 </script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js"></script>
 </body>
 </html>
